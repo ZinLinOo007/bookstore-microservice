@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div  th:fragment="bookdetail" class="row">
+    <div class="col-md-5 mt-4">
+        <img src="#" th:src="${book.imageUrl}" alt="" class="img-fluid">
+    </div>
+    <div class="col-md-7">
+            <div class="container">
+                <h3 class="text-muted" th:text="${book.title}"></h3>
+                <h4 th:text="'This book written by - ' + ${book.authorName}"></h4>
+                <h4 th:text="'This book published by - ' + ${book.publisher}"></h4>
+                <h4 th:text="'Published at - ' + ${book.yearPublished}"></h4>
+                <h4 th:text="'Its costs ' + ${book.price} + '$'"></h4>
+                <p class="lead"><span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi corporis, dolor, eligendi enim fugit illo incidunt laudantium magni necessitatibus nobis omnis placeat provident quae, sequi sint tempore temporibus unde voluptatibus!</span><span>Amet assumenda dignissimos distinctio dolorum eligendi, eveniet laboriosam maxime minus nemo neque porro quas rem repudiandae sed, ut. Alias esse, illo iure libero odio officiis perspiciatis repellendus reprehenderit saepe voluptatem?</span></p>
+            </div>
+    </div>
+</div>
+</body>
+</html>

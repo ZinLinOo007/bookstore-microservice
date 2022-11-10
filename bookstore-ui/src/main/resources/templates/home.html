@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{layout/masterLayout.html :: layout(~{::main})}" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<main role="main">
+    <div class="container p-4 mt-4 ">
+        <div th:replace="~{fragment/allbooks.html :: bookCard}"></div>
+    </div>
+</main>
+</body>
+</html>

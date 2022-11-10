@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<div th:fragment="heading">
+    <style>
+        #photo {
+            background: url("https://source.unsplash.com/random/?book");
+            background-size: cover;
+            background-repeat: no-repeat;
+            width: 100%;
+            min-height: 650px;
+        }
+
+    </style>
+
+
+    <div id="photo" class="jumbotron jumbotron-fluid text-center text-white d-flex justify-content-center align-items-center">
+        <div class="container">
+            <h1 class="display-3">AmazingBook Store</h1>
+            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur blanditiis, dignissimos
+                dolore, dolorem doloremque ea earum, eligendi explicabo facilis harum incidunt magni neque perspiciatis
+                possimus quia sit suscipit tempore voluptates.</p>
+            <a href="#" class="rounded-pill bg-info px-4 py-2 mt-3 text-white">Search Book</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
