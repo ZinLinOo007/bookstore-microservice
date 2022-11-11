@@ -12,6 +12,7 @@
         <module>bookstore-backend</module>
         <module>bookstore-ui</module>
         <module>payment</module>
+        <module>transportation-app</module>
     </modules>
 
     <properties>

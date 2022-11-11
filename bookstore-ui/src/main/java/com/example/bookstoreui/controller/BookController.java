@@ -4,17 +4,21 @@ package com.example.bookstoreui.controller;
 import com.example.bookstoreui.ds.AccountInfo;
 import com.example.bookstoreui.ds.Book;
 import com.example.bookstoreui.ds.Cart;
+import com.example.bookstoreui.ds.TransportInfo;
 import com.example.bookstoreui.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.Banner;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Random;
 import java.util.Set;
 
 
@@ -31,6 +35,9 @@ public class BookController {
 
     @Value("${payment.url}")
     private String paymentUrl;
+
+    @Value("${transport.url}")
+    private String transportUrl;
 
 
     @Autowired
@@ -49,6 +56,7 @@ public class BookController {
     @GetMapping({"/","/home","/index"})
     public String index(Model model){
         model.addAttribute("books",bookService.findAllBooks());
+        model.addAttribute("success",model.containsAttribute("success"));
         return "home";
     }
 
@@ -103,14 +111,14 @@ public class BookController {
              i++;
          }
          cart.setBookSet(bookSet);
-         //cart.getBookSet().forEach(System.out::println);
+         cart.getBookSet().forEach(System.out::println);
 
 
 
 //        ResponseEntity responseEntity=
-//            template.postForEntity(paymentUrl + "payment/checkout/1",String.valueOf(totalPrice()),String.class);
+//           template.postForEntity(paymentUrl + "payment/checkout/1",String.valueOf(totalPrice()),String.class);
 //
-//        System.out.println("========================="+ responseEntity.getStatusCode());
+//       System.out.println("========================="+ responseEntity.getStatusCode());
         return  "redirect:/bookstore/account-info";
     }
 
@@ -122,7 +130,7 @@ public class BookController {
     }
 
     @PostMapping("/account-info")
-    public String processAccountInfo(AccountInfo accountInfo, BindingResult result){
+    public String processAccountInfo(AccountInfo accountInfo, BindingResult result, @ModelAttribute("books") Set<Book> books, RedirectAttributes redirectAttributes){
 
         if (result.hasErrors()){
             return "accountInfoForm";
@@ -138,9 +146,27 @@ public class BookController {
 
 
         System.out.println("============================" + response.getStatusCode());
+        TransportInfo transportInfo = null;
+        if (response.getStatusCode().equals(HttpStatus.CREATED)){
+              transportInfo =  new TransportInfo(account.getName(),generateOrderId(),books,totalPrice());
 
-        return "redirect:/";
+            ResponseEntity transportResponse = template.postForEntity(transportUrl + "transport/transport-create",transportInfo,String.class);
+           if (transportResponse.getStatusCode().equals(HttpStatus.CREATED)){
+               redirectAttributes.addFlashAttribute("success",true);
+          }
+        }
 
+        else {
+           throw  new IllegalArgumentException("Checkout Error!");
+        }
+
+        return "redirect:/bookstore/home";
+    }
+
+    record TransportInfo2(String name,String orderId,Set<Book> books){}
+
+    private String generateOrderId(){
+        return "AMZ000" + new Random().nextInt(10000) + 10000;
     }
 
     private double totalPrice() {
